@@ -276,7 +276,7 @@ au BufRead,BufNewFile *  setfiletype txt
 :inoremap ] <c-r>=ClosePair(']')<CR>
 :inoremap " ""<ESC>i
 :inoremap ' ''<ESC>i
-:inoremap <C-j> <ESC>
+:inoremap <C-j> <down>
 :inoremap <C-h> <left>
 :inoremap <C-k> <up>
 :inoremap <C-l> <right>
