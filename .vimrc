@@ -196,14 +196,22 @@ set confirm
 set autoindent
 set cindent
 " Tab键的宽度
-set tabstop=4
+"set tabstop=4
 " 统一缩进为4
-set softtabstop=4
-set shiftwidth=4
+"set softtabstop=4
+
+
+set ts=4
+set expandtab
+$retab!
+set rnu
+
+
+"set shiftwidth=4
 " 不要用空格代替制表符
-set noexpandtab
+"set noexpandtab
 " 在行和段开始处使用制表符
-set smarttab
+"set smarttab
 " 显示行号
 set number
 " 历史记录数
@@ -292,16 +300,17 @@ endfunction
 "打开文件类型检测, 加了这句才可以用智能补全
 ""set completeopt=longest,menu
 """"""""""""""""""""""""""""""""Vundle
-set nocompatible
-filetype on
+set nocompatible              " be iMproved, required
+filetype on                  " required
 
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
-Bundle 'gmarik/vundle'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'scrooloose/syntastic'
-""Bundle '
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-filetype plugin indent on
-""""""""""""""""""""""""Vundle
-
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe' 
+let g:ycm_server_python_interpreter='/usr/bin/python3'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
