@@ -45,10 +45,7 @@ set novisualbell    " 不要闪烁(不明白)
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}   "状态行显示的内容  
 set laststatus=1    " 启动显示状态行(1),总是显示状态行(2)  
 set foldenable      " 允许折叠  
-"set foldmethod=manual   " 手动折叠  
-set foldmethod=indent 
-set foldcolumn=0
-set foldlevel=3 
+set foldmethod=manual   " 手动折叠  
 set background=dark "背景使用黑色 
 set nocompatible  "去掉讨厌的有关vi一致性模式，避免以前版本的一些bug和局限  
 " 显示中文帮助
@@ -96,11 +93,11 @@ func! SetTitle()
 	if &filetype == 'c'
 		call append(line(".")+6, "#include<stdio.h>")
 		call append(line(".")+7, "")
-    endif 
-	if &filetype == 'py'
-		call append(line(".")+6,"import ".expand("%"))
-		call append(line(".")+7,"")
 	endif
+	"	if &filetype == 'java'
+	"		call append(line(".")+6,"public class ".expand("%"))
+	"		call append(line(".")+7,"")
+	"	endif
 	"新建文件后，自动定位到文件末尾
 	autocmd BufNewFile * normal G
 endfunc 
@@ -116,7 +113,7 @@ map <C-A> ggVGY
 map! <C-A> <Esc>ggVGY
 map <F12> gg=G
 " 选中状态下 Ctrl+c 复制
-"vmap <C-c> "+y
+vmap <C-c> "+y
 "去空行  
 nnoremap <F2> :g/^\s*$/d<CR> 
 "比较文件  
@@ -127,10 +124,32 @@ map <M-F2> :tabnew<CR>
 map <F3> :tabnew .<CR>  
 "打开树状文件目录  
 map <C-F3> \be  
-"保存文件
-map <F5> :call SaveFile()<CR>
-func! SaveFile()
+"C，C++ 按F5编译运行
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
 	exec "w"
+	if &filetype == 'c'
+		exec "!g++ % -o %<"
+		exec "! ./%<"
+	elseif &filetype == 'cpp'
+		exec "!g++ % -o %<"
+		exec "! ./%<"
+	elseif &filetype == 'java' 
+		exec "!javac %" 
+		exec "!java %<"
+	elseif &filetype == 'sh'
+		:!./%
+	elseif &filetype == 'py'
+		exec "!python %"
+		exec "!python %<"
+	endif
+endfunc
+"C,C++的调试
+map <F8> :call Rungdb()<CR>
+func! Rungdb()
+	exec "w"
+	exec "!g++ % -g -o %<"
+	exec "!gdb ./%<"
 endfunc
 
 
@@ -143,9 +162,13 @@ set autoread
 " quickfix模式
 autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
 "代码补全 
-set completeopt=preview,menu 
+""set completeopt=preview,menu 
+"允许插件  
+""filetype plugin on
 "共享剪贴板  
 set clipboard+=unnamed 
+"从不备份  
+set nobackup
 "make 运行
 :set makeprg=g++\ -Wall\ \ %
 "自动保存
@@ -155,8 +178,14 @@ set cursorline              " 突出显示当前行
 set magic                   " 设置魔术
 set guioptions-=T           " 隐藏工具栏
 set guioptions-=m           " 隐藏菜单栏
-" 设置在状态行显示的信息
 "set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\
+" 设置在状态行显示的信息
+set foldcolumn=0
+set foldmethod=indent 
+set foldlevel=3 
+set foldenable              " 开始折叠
+" 不要使用vi的键盘模式，而是vim自己的
+set nocompatible
 " 语法高亮
 set syntax=on
 " 去掉输入错误的提示声音
@@ -164,20 +193,17 @@ set noeb
 " 在处理未保存或只读文件的时候，弹出确认
 set confirm
 " 自动缩进
-"c语言缩进模式
-"set cindent
-"set autoindent
-" 比cindent高级一点自动缩进
-"set smartindent
+set autoindent
+set cindent
 " Tab键的宽度
+"set tabstop=4
+" 统一缩进为4
 "set softtabstop=4
 
-"统一缩进为4空格
-set tabstop=4
-"将tab替换成空格
+
+set ts=4
 set expandtab
 $retab!
-"设置行号为相对行号
 set rnu
 
 
@@ -218,7 +244,7 @@ filetype on
 " 载入文件类型插件
 ""filetype plugin on
 " 为特定文件类型载入相关缩进文件
-filetype indent on
+""filetype indent on
 " 保存全局变量
 set viminfo+=!
 " 带有如下符号的单词不要被换行分割
@@ -245,6 +271,8 @@ set showmatch
 set matchtime=1
 " 光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
+" 为C程序提供自动缩进
+set smartindent
 " 高亮显示普通txt文件（需要txt.vim脚本）
 au BufRead,BufNewFile *  setfiletype txt
 "自动补全
@@ -258,7 +286,7 @@ au BufRead,BufNewFile *  setfiletype txt
 :inoremap " ""<ESC>i
 :inoremap ' ''<ESC>i
 :inoremap <C-j> <down>
-":inoremap <C-h> <left>
+:inoremap <C-h> <left>
 :inoremap <C-k> <up>
 :inoremap <C-l> <right>
 function! ClosePair(char)
@@ -268,13 +296,13 @@ function! ClosePair(char)
 		return a:char
 	endif
 endfunction
-"打开插件
-set completeopt=longest,menu
+""filetype plugin indent on 
+"打开文件类型检测, 加了这句才可以用智能补全
+""set completeopt=longest,menu
 """"""""""""""""""""""""""""""""Vundle
+set nocompatible              " be iMproved, required
 filetype on                  " required
 
-"允许插件  
-filetype plugin on
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -282,5 +310,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
-let g:ycm_server_python_interpreter='/usr/bin/python'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe' 
+let g:ycm_server_python_interpreter='/usr/bin/python3'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'

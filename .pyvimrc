@@ -96,7 +96,6 @@ func! SetTitle()
 	if &filetype == 'c'
 		call append(line(".")+6, "#include<stdio.h>")
 		call append(line(".")+7, "")
-    endif 
 	if &filetype == 'py'
 		call append(line(".")+6,"import ".expand("%"))
 		call append(line(".")+7,"")
@@ -144,6 +143,8 @@ set autoread
 autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
 "代码补全 
 set completeopt=preview,menu 
+"允许插件  
+"filetype plugin on
 "共享剪贴板  
 set clipboard+=unnamed 
 "make 运行
@@ -273,8 +274,6 @@ set completeopt=longest,menu
 """"""""""""""""""""""""""""""""Vundle
 filetype on                  " required
 
-"允许插件  
-filetype plugin on
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -282,5 +281,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
-let g:ycm_server_python_interpreter='/usr/bin/python'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe' 
+let g:ycm_server_python_interpreter='/usr/bin/python3'
+let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
