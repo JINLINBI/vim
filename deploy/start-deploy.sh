@@ -40,7 +40,7 @@ if [ ! -f ~/"$git" ]; then
     read email
     if [ -n $name -a -n $email ]; then
         #打开反斜杠转义
-        echo -e "[user]\n\tname = $name\n\temail = $email" >> ~/"$git"
+        printf "\n[user]\n\tname = $name\n\temail = $email" >> ~/"$git"
     else
         echo "输入无效，请自行添加git账户和邮箱！"
     fi
