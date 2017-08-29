@@ -13,10 +13,12 @@ git=".gitconfig"
 #-f 判断变量是否存在
 if [ ! -f ~/"$pippath"/pip.conf ]; then
     #-x判断变量是否存在且具有执行权限
-    if [ ! -x ~/"$pippath" ]; then
+    if [ ! -d ~/"$pippath" ]; then
         mkdir ~/"$pippath"
+    else
+        echo "文件夹存在，即将创建文件"
     fi
-    cp pip.conf ~/"$pippath"
+    cp pip.conf ~/"$pippath"/
     echo "copping pip.conf to ~/.pip/pip.conf"
 else
     echo "pip.conf文件已经存在，请确认！"
@@ -36,7 +38,12 @@ if [ ! -f ~/"$git" ]; then
     read name
     echo "请输入你git的邮箱地址："
     read email
-    echo "[user]\n\tname = $name\n\temail = $email" >> ~/"$git"
+    if [ -n $name -a -n $email ]; then
+        #打开反斜杠转义
+        echo -e "[user]\n\tname = $name\n\temail = $email" >> ~/"$git"
+    else
+        echo "输入无效，请自行添加git账户和邮箱！"
+    fi
 else
     echo ".gitconfig文件已经存在，请先确认了再执行脚本！"
 fi
