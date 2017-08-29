@@ -281,6 +281,17 @@ call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+" Pass the path to set the runtimepath properly.
+" Install L9 and avoid a Naming conflict if you've already installed a
+" Plugin 'ascenator/L9', {'name': 'newL9'}
+
+call vundle#end()            " required
+autocmd BufWritePost *.py call Flake8()
 " let Vundle manage Vundle, required
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_server_python_interpreter='/usr/bin/python'
