@@ -115,10 +115,13 @@ endif
 " key-bindings
 map <C-n> :NERDTreeToggle<CR>
 " switch panes
-map <C-j> <C-w><C-j>
-map <C-k> <C-w><C-k>
-map <C-l> <C-w><C-l>
-map <C-h> <C-w><C-h>
+:inoremap <C-j> <DOWN>
+:inoremap <C-k> <UP>
+:inoremap <C-l> <RIGHT>
+"map <C-j> <C-w><C-j>
+"map <C-k> <C-w><C-k>
+"map <C-l> <C-w><C-l>
+"map <C-h> <C-w><C-h>
 
 " toggle the paste option
 set pastetoggle=<F5>
