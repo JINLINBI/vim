@@ -125,7 +125,7 @@ func! SetTitle()
 		call append(line(".")+4, "\#########################################################################") 
 		call append(line(".")+5, "\#!/bin/bash") 
 		call append(line(".")+6, "") 
-	else 
+        else
 		call setline(1, "/*************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%")) 
 		call append(line(".")+1, "	> Author: jinlin ") 
@@ -133,6 +133,15 @@ func! SetTitle()
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
 		call append(line(".")+4, " ************************************************************************/") 
 		call append(line(".")+5, "")
+        endif 
+	if &filetype == 'py'
+		call setline(1, "# -*- coding:utf-8 -*-") 
+		call append(line("."), "\"\"\"") 
+		call append(line(".")+1, "> File Name: ".expand("%")) 
+		call append(line(".")+2, "> Author: jinlin") 
+		call append(line(".")+3, "> Mail: 898141731@qq.com") 
+		call append(line(".")+4, "> Created Time: ".strftime("%c")) 
+		call append(line(".")+5, "\"\"\"")
 	endif
 	if &filetype == 'cpp'
 		call append(line(".")+6, "#include<iostream>")
