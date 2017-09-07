@@ -167,6 +167,27 @@ map <C-n> :NERDTreeToggle<CR>
 :inoremap <C-j> <DOWN>
 :inoremap <C-k> <UP>
 :inoremap <C-l> <RIGHT>
+"auto complete
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+":inoremap { {<CR>}<ESC>O
+:inoremap { {}<ESC>i
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+:inoremap <C-j> <down>
+":inoremap <C-h> <left>
+:inoremap <C-k> <up>
+:inoremap <C-l> <right>
+function! ClosePair(char)
+	if getline('.')[col('.') - 1] == a:char
+		return "\<Right>"
+	else
+		return a:char
+	endif
+endfunction
 "map <C-j> <C-w><C-j>
 "map <C-k> <C-w><C-k>
 "map <C-l> <C-w><C-l>
