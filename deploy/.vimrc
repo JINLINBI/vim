@@ -91,6 +91,7 @@ set showmatch		" Show matching brackets.
 "set ignorecase		" Do case insensitive matching
 set smartcase		" Do smart case matching
 set incsearch		" Incremental search
+set hlsearch            " Hightlight search
 set autowrite		" Automatically save before commands like :next and :make
 set hidden		    " Hide buffers when they are abandoned
 set number          " display line number
@@ -113,7 +114,21 @@ if filereadable("/etc/vim/vimrc.local")
 endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "create  .c, .h, .sh, .java, .py files and insert fileheads
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java,*.py exec ":call SetTitle()" 
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()" 
+autocmd BufNewFile *.py exec ":call SetPyTitle()" 
+func! SetPyTitle() 
+	"如果文件类型为.sh文件 
+        call setline(1, "# -*- coding:utf-8 -*-") 
+        call append(line("."), "\"\"\"") 
+        call append(line(".")+1, "> File Name: ".expand("%")) 
+        call append(line(".")+2, "> Author: jinlin") 
+        call append(line(".")+3, "> Mail: 898141731@qq.com") 
+        call append(line(".")+4, "> Created Time: ".strftime("%c")) 
+        call append(line(".")+5, "\"\"\"")
+        call append(line(".")+6,"import json")
+        call append(line(".")+7,"")
+	autocmd BufNewFile * normal G
+endfunc 
 func! SetTitle() 
 	"如果文件类型为.sh文件 
 	if &filetype == 'sh' 
@@ -128,21 +143,12 @@ func! SetTitle()
         else
 		call setline(1, "/*************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%")) 
-		call append(line(".")+1, "	> Author: jinlin ") 
-		call append(line(".")+2, "	> Mail: 898141731@qq.com ") 
+		call append(line(".")+1, "	> Author: jinlin") 
+		call append(line(".")+2, "	> Mail: 898141731@qq.com") 
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
 		call append(line(".")+4, " ************************************************************************/") 
 		call append(line(".")+5, "")
         endif 
-	if &filetype == 'py'
-		call setline(1, "# -*- coding:utf-8 -*-") 
-		call append(line("."), "\"\"\"") 
-		call append(line(".")+1, "> File Name: ".expand("%")) 
-		call append(line(".")+2, "> Author: jinlin") 
-		call append(line(".")+3, "> Mail: 898141731@qq.com") 
-		call append(line(".")+4, "> Created Time: ".strftime("%c")) 
-		call append(line(".")+5, "\"\"\"")
-	endif
 	if &filetype == 'cpp'
 		call append(line(".")+6, "#include<iostream>")
 		call append(line(".")+7, "using namespace std;")
@@ -151,11 +157,7 @@ func! SetTitle()
 	if &filetype == 'c'
 		call append(line(".")+6, "#include<stdio.h>")
 		call append(line(".")+7, "")
-    endif 
-	if &filetype == 'py'
-		call append(line(".")+6,"import json")
-		call append(line(".")+7,"")
-	endif
+        endif 
 	autocmd BufNewFile * normal G
 endfunc 
 
